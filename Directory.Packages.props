@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Cocona" Version="2.2.0" />
+    <PackageVersion Include="Docker.DotNet" Version="3.125.15" />
     <PackageVersion Include="Docker.DotNet.BasicAuth" Version="3.125.15" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.17.0.82934" />

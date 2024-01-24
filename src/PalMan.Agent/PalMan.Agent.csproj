@@ -14,8 +14,4 @@
       <ProjectReference Include="..\PalMan.Shared\PalMan.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageVersion Update="Docker.DotNet" Version="3.125.15" />
-    </ItemGroup>
-
 </Project>
