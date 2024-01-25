@@ -39,6 +39,7 @@ public class AgentCommand
         if (pong is false)
         {
             AnsiConsole.MarkupLine("[red]The agent is not responding.[/]");
+            return;
         }
 
         await _configurationManager.AddAgent(agent);

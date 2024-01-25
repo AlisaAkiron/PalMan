@@ -23,7 +23,7 @@ public class AgentClient : IAgentClient, IDisposable
             var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{agent.Url}/ping"),
+                RequestUri = new Uri($"{agent.Url}/v1/ping"),
                 Headers =
                 {
                     { "Authorization", $"Bearer {agent.Token}" }
@@ -57,7 +57,7 @@ public class AgentClient : IAgentClient, IDisposable
             var httpRequest = new HttpRequestMessage
             {
                 Method = attribute.Method.ToMethod(),
-                RequestUri = new Uri($"{agent.Url}{attribute.Endpoint}"),
+                RequestUri = new Uri($"{agent.Url}/v1/{attribute.Endpoint}"),
                 Content = new StringContent(request.ToRequestString()),
                 Headers =
                 {
