@@ -1,9 +1,15 @@
-﻿using Docker.DotNet;
+﻿using System.Net;
+using CoreRCON;
+using Docker.DotNet;
+using Docker.DotNet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PalMan.Agent.Constants;
 using PalMan.Agent.Database;
 using PalMan.Agent.Entities;
 using PalMan.Agent.Extensions;
+using PalMan.Agent.Queue;
+using PalMan.Agent.Queue.Models;
 using PalMan.Agent.Validators.Common;
 using PalMan.Shared.Extensions;
 using PalMan.Shared.Models;
@@ -18,11 +24,16 @@ public class ServerController : ControllerBase
 {
     private readonly IDockerClient _docker;
     private readonly PalManDbContext _dbContext;
+    private readonly UpdateServerTaskQueue _updateServerTaskQueue;
 
-    public ServerController(IDockerClient docker, PalManDbContext dbContext)
+    public ServerController(
+        IDockerClient docker,
+        PalManDbContext dbContext,
+        UpdateServerTaskQueue updateServerTaskQueue)
     {
         _docker = docker;
         _dbContext = dbContext;
+        _updateServerTaskQueue = updateServerTaskQueue;
     }
 
     [HttpPost("create")]
@@ -60,6 +71,7 @@ public class ServerController : ControllerBase
     public async Task<IActionResult> UpdateServer(AgentRequest<UpdateServerRequest> request)
     {
         var server = await _dbContext.PalWorldServers
+            .AsNoTracking()
             .Include(x => x.Settings)
             .FirstAsync(x => x.Identifier == request.Data.Identifier);
 
@@ -94,9 +106,48 @@ public class ServerController : ControllerBase
             return BadRequest(message.ToFailedResponse());
         }
 
-        await _docker.RestartServerAsync(server);
+        var task = new UpdateServerTask
+        {
+            RawRequest = request.Data,
+            UpdatedSettings = server.Settings
+        };
+
+        _updateServerTaskQueue.Add(task);
+
+        return Ok(new UpdateServerResponse
+        {
+            TaskId = task.TaskId
+        }.ToResponse());
+    }
+
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteServer(AgentRequest<DeleteServerRequest> request)
+    {
+        var server = await _dbContext.PalWorldServers
+            .Include(x => x.Settings)
+            .FirstAsync(x => x.Identifier == request.Data.Identifier);
+
+        var info = await _docker.Containers.InspectContainerAsync(server.ContainerId);
+        var ip = IPAddress.Parse(info.NetworkSettings.IPAddress);
+
+        using var rcon = new RCON(ip, (ushort)server.Settings.RCONPort, server.Settings.AdminPassword);
+        await rcon.ConnectAsync();
+        await rcon.ForceShutdown();
+
+        await _docker.Containers.StopContainerAsync(server.ContainerId, new ContainerStopParameters());
+        await _docker.Containers.RemoveContainerAsync(server.ContainerId, new ContainerRemoveParameters
+        {
+            Force = true
+        });
+
+        if (request.Data.RemoveData)
+        {
+            Directory.Delete(Path.Combine(DockerConfiguration.VolumeRoot, server.Identifier), true);
+        }
+
+        _dbContext.PalWorldServers.Remove(server);
         await _dbContext.SaveChangesAsync();
 
-        return Ok(new UpdateServerResponse().ToResponse());
+        return Ok(new DeleteServerResponse().ToResponse());
     }
 }

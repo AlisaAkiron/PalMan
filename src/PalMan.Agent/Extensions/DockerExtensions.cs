@@ -89,9 +89,4 @@ public static class DockerExtensions
         var status = await dockerClient.Containers.StartContainerAsync(server.ContainerId, new ContainerStartParameters());
         return status;
     }
-
-    public static async Task RestartServerAsync(this IDockerClient docker, PalWorldServer server)
-    {
-        await docker.Containers.RestartContainerAsync(server.ContainerId, new ContainerRestartParameters());
-    }
 }

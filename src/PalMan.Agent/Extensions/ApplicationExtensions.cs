@@ -7,7 +7,7 @@ using PalMan.Shared.Utils;
 
 namespace PalMan.Agent.Extensions;
 
-public static class ApplicationExtension
+public static class ApplicationExtensions
 {
     public static async Task InitializeDatabase(this WebApplication app)
     {

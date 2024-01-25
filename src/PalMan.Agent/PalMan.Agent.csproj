@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CoreRCON" />
       <PackageReference Include="Docker.DotNet" />
       <PackageReference Include="Docker.DotNet.BasicAuth" />
       <PackageReference Include="FluentValidation.AspNetCore" />
