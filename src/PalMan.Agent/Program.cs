@@ -6,33 +6,36 @@ using FluentValidation.AspNetCore;
 using PalMan.Agent.Attributes;
 using PalMan.Agent.Authentication;
 using PalMan.Agent.Authentication.StaticToken;
+using PalMan.Agent.Constants;
 using PalMan.Agent.Database;
 using PalMan.Agent.Extensions;
+using PalMan.Agent.Utils;
+using Serilog;
+
+Log.Logger = LoggerUtils.CreateLogger();
+
+Log.Logger.Information("Starting PalMan Agent...");
+LoggerUtils.PrintAgentConfiguration();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddPalManConfigurations();
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PalManDbContext>();
-builder.Services.AddSingleton<IDockerClient, DockerClient>(sp =>
+builder.Services.AddSingleton<IDockerClient, DockerClient>(_ =>
 {
-    var config = sp.GetRequiredService<IConfiguration>();
-    var dockerHost = config.GetValue<string>("Docker:Host")!;
-    var dockerUsername = config.GetValue<string>("Docker:Username")!;
-    var dockerPassword = config.GetValue<string>("Docker:Password")!;
-
-    var dockerUri = new Uri(dockerHost);
+    var dockerUri = new Uri(DockerConfiguration.DockerHost);
 
     Credentials credential;
 
-    if (string.IsNullOrEmpty(dockerUsername) && string.IsNullOrEmpty(dockerPassword))
+    if (string.IsNullOrEmpty(DockerConfiguration.DockerUsername) && string.IsNullOrEmpty(DockerConfiguration.DockerPassword))
     {
         credential = new AnonymousCredentials();
     }
     else
     {
-        credential = new BasicAuthCredentials(dockerUsername, dockerPassword);
+        credential = new BasicAuthCredentials(DockerConfiguration.DockerUsername, DockerConfiguration.DockerPassword);
     }
 
     return new DockerClientConfiguration(dockerUri, credential).CreateClient();
@@ -53,6 +56,7 @@ builder.Services
 var app = builder.Build();
 
 await app.InitializeDatabase();
+await app.InitializeDocker();
 
 app.UseAuthentication();
 app.UseAuthorization();

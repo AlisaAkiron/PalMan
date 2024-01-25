@@ -74,8 +74,8 @@ public class ServerCommand
             (palManAgent, request.ToRequest());
 
         AnsiConsole.WriteLine("[green]Server created[/]");
-        AnsiConsole.WriteLine($"Server ID: [yellow]{response.Data.Id}[/]");
-        AnsiConsole.WriteLine($"Container ID: [yellow]{response.Data.ContainerId}[/]");
+        AnsiConsole.WriteLine($"Server ID: [yellow]{response.Id}[/]");
+        AnsiConsole.WriteLine($"Container ID: [yellow]{response.ContainerId}[/]");
     }
 
     [Command("update", Description = "Update Palworld server settings")]

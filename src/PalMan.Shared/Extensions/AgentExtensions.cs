@@ -7,12 +7,21 @@ namespace PalMan.Shared.Extensions;
 
 public static class AgentExtensions
 {
-    public static AgentResponse<T> ToResponse<T>(this T data, string message = "") where T : IAgentResponseData, new()
+    public static AgentResponse<T> ToResponse<T>(this T data, string message = "") where T : class, IAgentResponseData, new()
     {
         return new AgentResponse<T>
         {
             Message = message,
             Data = data
+        };
+    }
+
+    public static AgentResponse<FailedResponsePlaceholder> ToFailedResponse(this string message)
+    {
+        return new AgentResponse<FailedResponsePlaceholder>
+        {
+            Message = message,
+            Data = null
         };
     }
 

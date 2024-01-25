@@ -12,11 +12,11 @@ public static class DockerExtensions
     {
         await docker.Containers.RemoveContainerAsync(server.ContainerId, new ContainerRemoveParameters());
 
-        var volume = Path.Combine(AgentConfiguration.VolumeRoot, server.Identifier);
+        var volume = Path.Combine(DockerConfiguration.VolumeRoot, server.Identifier);
 
         var containerCreationParameter = new CreateContainerParameters
         {
-            Image = AgentConfiguration.DockerImage,
+            Image = DockerConfiguration.DockerImage,
             Env = new List<string>
             {
                 "NO_UPDATE=false",
@@ -46,14 +46,14 @@ public static class DockerExtensions
     {
         await docker.Containers.RemoveContainerAsync(server.ContainerId, new ContainerRemoveParameters());
 
-        var volume = Path.Combine(AgentConfiguration.VolumeRoot, server.Identifier);
+        var volume = Path.Combine(DockerConfiguration.VolumeRoot, server.Identifier);
         var settingsFile = Path.Combine(volume, "Pal", "Saved", "Config", "LinuxServer", "PalWorldSettings.ini");
         var settings = ServerArgumentsSerializer.Serialize(server.Settings);
         await File.WriteAllTextAsync(settingsFile, settings);
 
         var containerCreationParameter = new CreateContainerParameters
         {
-            Image = AgentConfiguration.DockerImage,
+            Image = DockerConfiguration.DockerImage,
             Env = new List<string>
             {
                 "NO_UPDATE=false",

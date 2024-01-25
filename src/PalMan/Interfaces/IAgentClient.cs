@@ -8,5 +8,7 @@ public interface IAgentClient
 {
     public Task<bool> PingAsync(PalManAgent agent);
 
-    public Task<AgentResponse<TResponse>> RequestAsync<TRequest, TResponse>(PalManAgent agent, AgentRequest<TRequest> request) where TResponse : IAgentResponseData, new() where TRequest : IAgentRequestData, new();
+    public Task<TResponse> RequestAsync<TRequest, TResponse>(PalManAgent agent, AgentRequest<TRequest> request)
+        where TResponse : class, IAgentResponseData, new()
+        where TRequest : IAgentRequestData, new();
 }

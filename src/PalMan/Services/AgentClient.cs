@@ -47,7 +47,9 @@ public class AgentClient : IAgentClient, IDisposable
         }
     }
 
-    public async Task<AgentResponse<TResponse>> RequestAsync<TRequest, TResponse>(PalManAgent agent, AgentRequest<TRequest> request) where TRequest : IAgentRequestData, new() where TResponse : IAgentResponseData, new()
+    public async Task<TResponse> RequestAsync<TRequest, TResponse>(PalManAgent agent, AgentRequest<TRequest> request)
+        where TResponse : class, IAgentResponseData, new()
+        where TRequest : IAgentRequestData, new()
     {
         try
         {
@@ -69,12 +71,12 @@ public class AgentClient : IAgentClient, IDisposable
             var body = await response.Content.ReadAsStringAsync();
             var responseData = JsonSerializer.Deserialize<AgentResponse<TResponse>>(body)!;
 
-            if (response.IsSuccessStatusCode is false)
+            if (response.IsSuccessStatusCode is false || responseData.Data is null)
             {
                 throw new HttpRequestException($"Request failed, {responseData.Message}");
             }
 
-            return responseData;
+            return responseData.Data!;
         }
         catch (Exception e)
         {

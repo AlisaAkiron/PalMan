@@ -9,6 +9,7 @@
       <PackageReference Include="Docker.DotNet.BasicAuth" />
       <PackageReference Include="FluentValidation.AspNetCore" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+      <PackageReference Include="Serilog.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>

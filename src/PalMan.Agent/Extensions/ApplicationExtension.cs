@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Docker.DotNet;
+using Microsoft.EntityFrameworkCore;
+using PalMan.Agent.Constants;
 using PalMan.Agent.Database;
 using PalMan.Agent.Entities;
 using PalMan.Shared.Utils;
@@ -41,6 +43,23 @@ public static class ApplicationExtension
         }
 
         await dbContext.DisposeAsync();
+
+        await asyncScope.DisposeAsync();
+    }
+
+    public static async Task InitializeDocker(this WebApplication app)
+    {
+        var asyncScope = app.Services.CreateAsyncScope();
+        var docker = asyncScope.ServiceProvider.GetRequiredService<IDockerClient>();
+        var logger = asyncScope.ServiceProvider.GetRequiredService<ILogger<DockerClient>>();
+
+        logger.LogInformation("Initializing Docker...");
+        logger.LogInformation("Use Docker host: {DockerHost}", DockerConfiguration.DockerHost);
+
+        var version = await docker.System.GetVersionAsync();
+        logger.LogInformation("Docker version: {Version}", version.Version);
+
+        logger.LogInformation("Docker initialized");
 
         await asyncScope.DisposeAsync();
     }

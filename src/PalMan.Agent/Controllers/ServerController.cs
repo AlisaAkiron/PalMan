@@ -90,7 +90,7 @@ public class ServerController : ControllerBase
         if (validationResult.IsValid is false)
         {
             var message = string.Join(';', validationResult.Errors.Select(x => x.ErrorMessage));
-            return BadRequest(new UpdateServerResponse().ToResponse(message));
+            return BadRequest(message.ToFailedResponse());
         }
 
         await _docker.RestartServerAsync(server);
