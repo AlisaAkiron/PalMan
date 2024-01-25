@@ -25,7 +25,7 @@ public class AgentCommand
         var agents = await _configurationManager.GetAgents();
         if (agents.Exists(x => x.Name == name))
         {
-            AnsiConsole.WriteLine("[red]The agent with the same name already exist.[/]");
+            AnsiConsole.MarkupLine("[red]The agent with the same name already exist.[/]");
         }
 
         var agent = new PalManAgent
@@ -38,10 +38,10 @@ public class AgentCommand
         var pong = await _client.PingAsync(agent);
         if (pong is false)
         {
-            AnsiConsole.WriteLine("[red]The agent is not responding.[/]");
+            AnsiConsole.MarkupLine("[red]The agent is not responding.[/]");
         }
 
         await _configurationManager.AddAgent(agent);
-        AnsiConsole.WriteLine("[green]The agent has been added successfully.[/]");
+        AnsiConsole.MarkupLine("[green]The agent has been added successfully.[/]");
     }
 }

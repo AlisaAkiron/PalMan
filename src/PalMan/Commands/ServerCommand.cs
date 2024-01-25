@@ -39,7 +39,7 @@ public class ServerCommand
         var palManAgent = await _configurationManager.GetAgent(agent);
         if (palManAgent is null)
         {
-            AnsiConsole.WriteLine("[red]Agent not found[/]");
+            AnsiConsole.MarkupLine("[red]Agent not found[/]");
             return;
         }
 
@@ -47,7 +47,7 @@ public class ServerCommand
 
         if (serverArguments is null)
         {
-            AnsiConsole.WriteLine("[red]Failed to parse server arguments[/]");
+            AnsiConsole.MarkupLine("[red]Failed to parse server arguments[/]");
             return;
         }
 
@@ -73,9 +73,9 @@ public class ServerCommand
         var response = await _client.RequestAsync<CreateServerRequest, CreateServerResponse>
             (palManAgent, request.ToRequest());
 
-        AnsiConsole.WriteLine("[green]Server created[/]");
-        AnsiConsole.WriteLine($"Server ID: [yellow]{response.Id}[/]");
-        AnsiConsole.WriteLine($"Container ID: [yellow]{response.ContainerId}[/]");
+        AnsiConsole.MarkupLine("[green]Server created[/]");
+        AnsiConsole.MarkupLine($"Server ID: [yellow]{response.Id}[/]");
+        AnsiConsole.MarkupLine($"Container ID: [yellow]{response.ContainerId}[/]");
     }
 
     [Command("update", Description = "Update Palworld server settings")]
@@ -97,7 +97,7 @@ public class ServerCommand
         var palManAgent = await _configurationManager.GetAgent(agent);
         if (palManAgent is null)
         {
-            AnsiConsole.WriteLine("[red]Agent not found[/]");
+            AnsiConsole.MarkupLine("[red]Agent not found[/]");
             return;
         }
 
@@ -105,7 +105,7 @@ public class ServerCommand
 
         if (serverArguments is null)
         {
-            AnsiConsole.WriteLine("[red]Failed to parse server arguments[/]");
+            AnsiConsole.MarkupLine("[red]Failed to parse server arguments[/]");
             return;
         }
 
@@ -126,7 +126,7 @@ public class ServerCommand
 
         if (changeList.Count == 0)
         {
-            AnsiConsole.WriteLine("[red]No changes to apply[/]");
+            AnsiConsole.MarkupLine("[red]No changes to apply[/]");
             return;
         }
 
@@ -139,11 +139,12 @@ public class ServerCommand
             table.AddRow(propertyName, value.ToString()!);
         }
 
+        AnsiConsole.Write(table);
         var confirm = AnsiConsole.Confirm("Confirm changes?", false);
 
         if (confirm is false)
         {
-            AnsiConsole.WriteLine("[red]Aborted[/]");
+            AnsiConsole.MarkupLine("[red]Aborted[/]");
             return;
         }
 
@@ -157,6 +158,6 @@ public class ServerCommand
         await _client.RequestAsync<UpdateServerRequest, UpdateServerResponse>
             (palManAgent, request.ToRequest());
 
-        AnsiConsole.WriteLine("[green]Server updated[/]");
+        AnsiConsole.MarkupLine("[green]Server updated[/]");
     }
 }
