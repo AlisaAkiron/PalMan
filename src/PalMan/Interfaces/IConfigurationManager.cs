@@ -10,5 +10,5 @@ public interface IConfigurationManager
 
     public Task AddAgent(PalManAgent agent);
 
-    public Task RemoveAgent(string name);
+    public Task<bool> RemoveAgent(string name);
 }

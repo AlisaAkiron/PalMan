@@ -14,7 +14,10 @@ namespace PalMan.Services;
 [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
 public class AgentClient : IAgentClient, IDisposable
 {
-    private readonly HttpClient _client = new();
+    private readonly HttpClient _client = new()
+    {
+        Timeout = TimeSpan.FromSeconds(5)
+    };
 
     public async Task<bool> PingAsync(PalManAgent agent)
     {
@@ -39,6 +42,10 @@ public class AgentClient : IAgentClient, IDisposable
 
             var responseString = await response.Content.ReadAsStringAsync();
             return responseString == "pong";
+        }
+        catch (TaskCanceledException)
+        {
+            return false;
         }
         catch (Exception e)
         {

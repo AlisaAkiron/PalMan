@@ -89,11 +89,19 @@ public class ConfigurationManager : IConfigurationManager
         await File.WriteAllTextAsync(_palManAgentFile.FullName, json);
     }
 
-    public async Task RemoveAgent(string name)
+    public async Task<bool> RemoveAgent(string name)
     {
         var agents = await GetAgents();
-        agents.RemoveAll(x => x.Name == name);
+        var count = agents.RemoveAll(x => x.Name == name);
+
+        if (count == 0)
+        {
+            return false;
+        }
+
         var json = JsonSerializer.Serialize(agents);
         await File.WriteAllTextAsync(_palManAgentFile.FullName, json);
+
+        return true;
     }
 }
