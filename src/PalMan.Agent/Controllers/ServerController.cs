@@ -30,6 +30,7 @@ public class ServerController : ControllerBase
     {
         var serverArguments = request.Data.ServerArguments;
 
+        // FORCE RCON
         serverArguments.RCONEnabled = true;
 
         var server = new PalWorldServer

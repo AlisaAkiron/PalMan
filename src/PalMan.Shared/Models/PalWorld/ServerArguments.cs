@@ -163,7 +163,7 @@ public class ServerArguments
 
     [Column("RCONEnabled")]
     [Description("Enable RCON")]
-    public bool RCONEnabled { get; set; } = true;
+    public bool RCONEnabled { get; set; } = false;
 
     [Column("RCONPort")]
     [Description("Port number for RCON")]

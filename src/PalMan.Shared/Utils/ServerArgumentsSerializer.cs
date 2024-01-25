@@ -20,17 +20,7 @@ public static class ServerArgumentsSerializer
             var key = property.Name;
             var value = property.GetValue(arguments)!;
 
-            var formattedValue = value switch
-            {
-                bool boolValue => boolValue ? "True" : "False",
-                float floatValue => floatValue.ToString("F6"),
-                int intValue => intValue.ToString(),
-                string stringValue when string.IsNullOrEmpty(stringValue) => "\"\"",
-                string stringValue when stringValue.Contains(' ') => $"\"{stringValue}\"",
-                string stringValue when property.Name == "BanListURL" => $"\"{stringValue}\"",
-                string stringValue => stringValue,
-                _ => throw new InvalidOperationException("Unknown type")
-            };
+            var formattedValue = FormatValue(value, property.Name);
 
             stringBuilder.Append($"{key}=${formattedValue},");
         }
@@ -40,5 +30,20 @@ public static class ServerArgumentsSerializer
         stringBuilder.AppendLine();
 
         return stringBuilder.ToString();
+    }
+
+    public static string FormatValue(object o, string propertyName)
+    {
+        return o switch
+        {
+            bool boolValue => boolValue ? "True" : "False",
+            float floatValue => floatValue.ToString("F6"),
+            int intValue => intValue.ToString(),
+            string stringValue when string.IsNullOrEmpty(stringValue) => "\"\"",
+            string stringValue when stringValue.Contains(' ') => $"\"{stringValue}\"",
+            string stringValue when propertyName == "BanListURL" => $"\"{stringValue}\"",
+            string stringValue => stringValue,
+            _ => throw new InvalidOperationException("Unknown type")
+        };
     }
 }

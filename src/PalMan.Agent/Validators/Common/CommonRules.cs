@@ -15,9 +15,6 @@ public static class CommonRules
                 c.RuleFor(x => x.AdminPassword)
                     .Must(p => p.IsValidServerPassword()).WithMessage("Admin password can only contain letters and numbers");
 
-                c.RuleFor(x => x.RCONEnabled)
-                    .Must(p => p).WithMessage("RCON must be enabled (This error is not possible to get)");
-
                 c.RuleFor(x => x.ServerName)
                     .NotEmpty().WithMessage("Server name cannot be empty");
 
