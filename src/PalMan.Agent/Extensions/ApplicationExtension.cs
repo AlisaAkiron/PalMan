@@ -53,13 +53,21 @@ public static class ApplicationExtension
         var docker = asyncScope.ServiceProvider.GetRequiredService<IDockerClient>();
         var logger = asyncScope.ServiceProvider.GetRequiredService<ILogger<DockerClient>>();
 
-        logger.LogInformation("Initializing Docker...");
+        logger.LogDebug("Initializing Docker...");
         logger.LogInformation("Use Docker host: {DockerHost}", DockerConfiguration.DockerHost);
 
-        var version = await docker.System.GetVersionAsync();
-        logger.LogInformation("Docker version: {Version}", version.Version);
+        try
+        {
+            var version = await docker.System.GetVersionAsync();
+            logger.LogInformation("Docker version: {Version}", version.Version);
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogCritical(e, "Docker is not available, please check your Docker host configuration");
+            Environment.Exit(-1);
+        }
 
-        logger.LogInformation("Docker initialized");
+        logger.LogDebug("Docker initialized");
 
         await asyncScope.DisposeAsync();
     }
