@@ -1,5 +1,9 @@
+using System.Reflection;
 using Docker.DotNet;
 using Docker.DotNet.BasicAuth;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using PalMan.Agent.Attributes;
 using PalMan.Agent.Authentication;
 using PalMan.Agent.Authentication.StaticToken;
 using PalMan.Agent.Database;
@@ -32,6 +36,14 @@ builder.Services.AddSingleton<IDockerClient, DockerClient>(sp =>
     }
 
     return new DockerClientConfiguration(dockerUri, credential).CreateClient();
+});
+
+builder.Services.AddValidatorsFromAssembly(
+    typeof(Program).Assembly,
+    filter: result => result.ValidatorType.GetCustomAttribute<AssemblyScanIgnoredAttribute>() is null);
+builder.Services.AddFluentValidationAutoValidation(configure =>
+{
+    configure.DisableDataAnnotationsValidation = true;
 });
 
 builder.Services

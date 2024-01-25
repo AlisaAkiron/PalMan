@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using PalMan.Agent.Database;
 using PalMan.Agent.Entities;
 using PalMan.Agent.Extensions;
+using PalMan.Agent.Validators.Common;
 using PalMan.Shared.Extensions;
 using PalMan.Shared.Models;
 using PalMan.Shared.Models.Requests;
 using PalMan.Shared.Models.Response;
-using PalMan.Shared.Utils;
 
 namespace PalMan.Agent.Controllers;
 
@@ -28,29 +28,9 @@ public class ServerController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateServer(AgentRequest<CreateServerRequest> request)
     {
-        var currentServers = await _dbContext.PalWorldServers
-            .Include(x => x.Settings)
-            .ToListAsync();
-
-        var isNameExist = currentServers.Exists(x => x.Identifier == request.Data.Identifier);
-        var isPortExist = currentServers.Exists(x => x.Settings.PublicPort == request.Data.ServerArguments.PublicPort);
-        var isRconPortExist = currentServers.Exists(x => x.Settings.RCONPort == request.Data.ServerArguments.RCONPort);
-
-        if (isNameExist || isPortExist || isRconPortExist)
-        {
-            return BadRequest(new CreateServerResponse().ToResponse("Server name or port or rcon port already exist"));
-        }
-
         var serverArguments = request.Data.ServerArguments;
 
-        // FORCE RCON
         serverArguments.RCONEnabled = true;
-
-        // FORCE ADMIN PASSWORD
-        if (string.IsNullOrEmpty(serverArguments.AdminPassword))
-        {
-            serverArguments.AdminPassword = RandomUtils.GeneratePassword();
-        }
 
         var server = new PalWorldServer
         {
@@ -80,17 +60,7 @@ public class ServerController : ControllerBase
     {
         var server = await _dbContext.PalWorldServers
             .Include(x => x.Settings)
-            .FirstOrDefaultAsync(x => x.Identifier == request.Data.Identifier);
-
-        if (server is null)
-        {
-            return NotFound(new UpdateServerResponse().ToResponse("Server not found"));
-        }
-
-        if (server.Installed is false)
-        {
-            return BadRequest(new UpdateServerResponse().ToResponse("Server not installed"));
-        }
+            .FirstAsync(x => x.Identifier == request.Data.Identifier);
 
         // Update server settings
         foreach (var propertyNames in request.Data.ChangeList)
@@ -110,10 +80,17 @@ public class ServerController : ControllerBase
         // FORCE RCON
         server.Settings.RCONEnabled = true;
 
-        // FORCE ADMIN PASSWORD
-        if (string.IsNullOrEmpty(server.Settings.AdminPassword))
+        var existingServerSettings = await _dbContext.PalWorldSettings
+            .AsNoTracking()
+            .Where(x => x.Id != server.Settings.Id)
+            .ToListAsync();
+        var serverSettingsValidator = new ServerSettingsValidator(existingServerSettings);
+        var validationResult = await serverSettingsValidator.ValidateAsync(server.Settings);
+
+        if (validationResult.IsValid is false)
         {
-            server.Settings.AdminPassword = RandomUtils.GeneratePassword();
+            var message = string.Join(';', validationResult.Errors.Select(x => x.ErrorMessage));
+            return BadRequest(new UpdateServerResponse().ToResponse(message));
         }
 
         await _docker.RestartServerAsync(server);
