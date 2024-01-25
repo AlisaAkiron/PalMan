@@ -1,5 +1,4 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using PalMan.Agent.Database;
 using PalMan.Shared.Models;
 using PalMan.Shared.Models.Requests;
@@ -12,9 +11,9 @@ public class UpdateServerRequestValidator : AbstractValidator<AgentRequest<Updat
     {
         RuleFor(x => x.Data.Identifier)
             .NotEmpty().WithMessage("Identifier is required")
-            .CustomAsync(async (s, context, token) =>
+            .Custom((s, context) =>
             {
-                var existingServer = await dbContext.PalWorldServers.FirstOrDefaultAsync(x => x.Identifier == s, token);
+                var existingServer = dbContext.PalWorldServers.FirstOrDefault(x => x.Identifier == s);
                 if (existingServer is null)
                 {
                     context.AddFailure("Server does not exist");
