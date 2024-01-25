@@ -8,6 +8,10 @@
       <PackageReference Include="Docker.DotNet" />
       <PackageReference Include="Docker.DotNet.BasicAuth" />
       <PackageReference Include="FluentValidation.AspNetCore" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
       <PackageReference Include="Serilog.AspNetCore" />
     </ItemGroup>
