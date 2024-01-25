@@ -11,7 +11,7 @@ using PalMan.Agent.Database;
 namespace PalMan.Agent.Migrations
 {
     [DbContext(typeof(PalManDbContext))]
-    [Migration("20240125053616_Initialize")]
+    [Migration("20240125062007_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -73,195 +73,260 @@ namespace PalMan.Agent.Migrations
 
                     b.Property<string>("AdminPassword")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("AdminPassword");
 
                     b.Property<float>("AutoResetGuildTimeNoOnlinePlayers")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("AutoResetGuildTimeNoOnlinePlayers");
 
                     b.Property<string>("BanListURL")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("BanListURL");
 
                     b.Property<int>("BaseCampMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("BaseCampMaxNum");
 
                     b.Property<int>("BaseCampWorkerMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("BaseCampWorkerMaxNum");
 
                     b.Property<float>("BuildObjectDamageRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("BuildObjectDamageRate");
 
                     b.Property<float>("BuildObjectDeteriorationDamageRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("BuildObjectDeteriorationDamageRate");
 
                     b.Property<float>("CollectionDropRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("CollectionDropRate");
 
                     b.Property<float>("CollectionObjectHpRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("CollectionObjectHPRate");
 
                     b.Property<float>("CollectionObjectRespawnSpeedRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("CollectionObjectRespawnSpeedRate");
 
                     b.Property<int>("CoopPlayerMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("CoopPlayerMaxNum");
 
                     b.Property<float>("DayTimeSpeedRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("DayTimeSpeedRate");
 
                     b.Property<string>("DeathPenalty")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("DeathPenalty");
 
                     b.Property<string>("Difficulty")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Difficulty");
 
                     b.Property<float>("DropItemAliveMaxHours")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("DropItemAliveMaxHours");
 
                     b.Property<int>("DropItemMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("DropItemMaxNum");
 
                     b.Property<int>("DropItemMaxNum_UNKO")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("DropItemMaxNum_UNKO");
 
                     b.Property<float>("EnemyDropItemRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("EnemyDropItemRate");
 
                     b.Property<float>("ExpRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("ExpRate");
 
                     b.Property<int>("GuildPlayerMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("GuildPlayerMaxNum");
 
                     b.Property<float>("NightTimeSpeedRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("NightTimeSpeedRate");
 
                     b.Property<float>("PalAutoHPRegeneRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalAutoHPRegenerationRate");
 
                     b.Property<float>("PalAutoHpRegeneRateInSleep")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalAutoHPRegenerationRateInSleep");
 
                     b.Property<float>("PalCaptureRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalCaptureRate");
 
                     b.Property<float>("PalDamageRateAttack")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalDamageRateAttack");
 
                     b.Property<float>("PalDamageRateDefense")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalDamageRateDefense");
 
                     b.Property<float>("PalEggDefaultHatchingTime")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalEggDefaultHatchingTime");
 
                     b.Property<float>("PalSpawnNumRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalSpawnNumRate");
 
                     b.Property<float>("PalStaminaDecreaceRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalStaminaDecreaseRate");
 
                     b.Property<float>("PalStomachDecreaceRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PalStomachDecreaseRate");
 
                     b.Property<float>("PlayerAutoHPRegeneRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerAutoHPRegenerationRate");
 
                     b.Property<float>("PlayerAutoHpRegeneRateInSleep")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerAutoHPRegenerationRateInSleep");
 
                     b.Property<float>("PlayerDamageRateAttack")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerDamageRateAttack");
 
                     b.Property<float>("PlayerDamageRateDefense")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerDamageRateDefense");
+
+                    b.Property<float>("PlayerStaminaDecreaceRate")
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerStaminaDecreaseRate");
 
                     b.Property<float>("PlayerStomachDecreaceRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("PlayerStomachDecreaseRate");
 
                     b.Property<string>("PublicIP")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PublicIP");
 
                     b.Property<int>("PublicPort")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PublicPort");
 
                     b.Property<bool>("RCONEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("RCONEnabled");
 
                     b.Property<int>("RCONPort")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("RCONPort");
 
                     b.Property<string>("Region")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Region");
 
                     b.Property<string>("ServerDescription")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ServerDescription");
 
                     b.Property<string>("ServerName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ServerName");
 
                     b.Property<string>("ServerPassword")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ServerPassword");
 
                     b.Property<int>("ServerPlayerMaxNum")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ServerPlayerMaxNum");
 
                     b.Property<float>("WorkSpeedRate")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnName("WorkSpeedRate");
 
                     b.Property<bool>("bActiveUNKO")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ActiveUNKO");
 
                     b.Property<bool>("bAutoResetGuildNoOnlinePlayers")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("AutoResetGuildNoOnlinePlayers");
 
                     b.Property<bool>("bCanPickupOtherGuildDeathPenaltyDrop")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("CanPickupOtherGuildDeathPenaltyDrop");
 
                     b.Property<bool>("bEnableAimAssistKeyboard")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableAimAssistKeyboard");
 
                     b.Property<bool>("bEnableAimAssistPad")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableAimAssistPad");
 
                     b.Property<bool>("bEnableDefenseOtherGuildPlayer")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableDefenseOtherGuildPlayer");
 
                     b.Property<bool>("bEnableFastTravel")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableFastTravel");
 
                     b.Property<bool>("bEnableFriendlyFire")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableFriendlyFire");
 
                     b.Property<bool>("bEnableInvaderEnemy")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableInvaderEnemy");
 
                     b.Property<bool>("bEnableNonLoginPenalty")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnableNonLoginPenalty");
 
                     b.Property<bool>("bEnablePlayerToPlayerDamage")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EnablePlayerToPlayerDamage");
 
                     b.Property<bool>("bExistPlayerAfterLogout")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ExistPlayerAfterLogout");
 
                     b.Property<bool>("bIsMultiplay")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("IsMultiplayer");
 
                     b.Property<bool>("bIsPvP")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("IsPvP");
 
                     b.Property<bool>("bIsStartLocationSelectByMap")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("IsStartLocationSelectByMap");
 
                     b.Property<bool>("bUseAuth")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("UseAuth");
 
                     b.HasKey("Id");
 
