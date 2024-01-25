@@ -1,5 +1,7 @@
 using Docker.DotNet;
 using Docker.DotNet.BasicAuth;
+using PalMan.Agent.Authentication;
+using PalMan.Agent.Authentication.StaticToken;
 using PalMan.Agent.Database;
 using PalMan.Agent.Extensions;
 
@@ -32,9 +34,16 @@ builder.Services.AddSingleton<IDockerClient, DockerClient>(sp =>
     return new DockerClientConfiguration(dockerUri, credential).CreateClient();
 });
 
+builder.Services
+    .AddAuthentication(StaticTokenDefaults.AuthenticationSchema)
+    .AddStaticToken();
+
 var app = builder.Build();
 
 await app.InitializeDatabase();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
